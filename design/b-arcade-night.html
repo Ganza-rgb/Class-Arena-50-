@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>B · Arcade Night — Class Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #111318;
+    --bg2: #171a21;
+    --tile: #1f232c;
+    --tile2: #272c37;
+    --line: rgba(255, 255, 255, .07);
+    --text: #f4f6fb;
+    --dim: #9aa3b5;
+    --blue: #2f6bff;
+    --green: #2fc552;
+    --red: #ff3d3d;
+    --pink: #ff4fa3;
+    --purple: #8b5cf6;
+    --gold: #ffc531;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: radial-gradient(1200px 700px at 20% -10%, #3a1d6e 0%, transparent 60%), radial-gradient(900px 600px at 100% 10%, #0b3b6e 0%, transparent 55%), #0b0c10; color: var(--text); min-height: 100vh; }
+  .top { max-width: 1240px; margin: 0 auto; padding: 32px 20px 0; }
+  .top h1 { font-family: 'Lilita One', sans-serif; font-size: 62px; line-height: 1; letter-spacing: .5px; margin-top: 18px; text-shadow: 0 6px 0 rgba(0, 0, 0, .35); }
+  .top p { max-width: 560px; color: #c4cada; line-height: 1.5; margin-top: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { background: var(--tile); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 13px; color: #cfd5e3; }
+  .nav-dirs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-dirs a { text-decoration: none; background: var(--tile); color: #fff; border-radius: 12px; padding: 10px 16px; font-weight: 700; font-size: 14px; border: 1px solid var(--line); }
+  .nav-dirs a.on { background: var(--blue); }
+
+  .phones { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; padding: 40px 16px 24px; }
+  .phone { width: 360px; height: 760px; border-radius: 48px; border: 10px solid #050507; overflow: hidden; position: relative; background: var(--bg); box-shadow: 0 30px 80px rgba(0, 0, 0, .6); }
+  .status { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-weight: 700; font-size: 15px; }
+  .status svg { height: 12px; fill: #fff; }
+  .label { text-align: center; font-weight: 700; margin-top: 14px; font-size: 14px; color: #aab2c4; }
+
+  .glossy { filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .55)); }
+  .title { font-family: 'Lilita One', sans-serif; letter-spacing: .4px; }
+
+  /* app bar */
+  .appbar { display: flex; align-items: center; gap: 8px; padding: 4px 14px 10px; }
+  .logo { display: flex; align-items: center; gap: 6px; background: linear-gradient(90deg, #ff4fa3, #8b5cf6 55%, #2f6bff); border-radius: 14px; padding: 7px 12px 7px 8px; font-family: 'Lilita One', sans-serif; font-size: 17px; letter-spacing: .5px; }
+  .logo img { width: 26px; }
+  .xp { margin-left: auto; display: flex; align-items: center; gap: 8px; background: var(--tile); border-radius: 14px; padding: 5px 6px 5px 10px; border: 1px solid var(--line); }
+  .xp small { display: block; font-size: 10px; color: var(--dim); font-weight: 600; }
+  .xp b { font-size: 14px; }
+  .plus { width: 30px; height: 30px; border-radius: 10px; background: var(--blue); display: grid; place-items: center; font-weight: 800; font-size: 18px; }
+  .menu { width: 38px; height: 38px; border-radius: 12px; background: var(--tile); display: grid; place-items: center; border: 1px solid var(--line); }
+
+  /* live strip */
+  .live { display: flex; gap: 8px; padding: 0 0 12px 0; overflow: hidden; align-items: stretch; }
+  .live .tab { writing-mode: vertical-rl; transform: rotate(180deg); background: var(--blue); font-size: 10px; font-weight: 800; letter-spacing: 1.5px; padding: 6px 4px; border-radius: 0 8px 8px 0; }
+  .win { display: flex; align-items: center; gap: 8px; background: var(--tile); border-radius: 14px; padding: 6px 10px 6px 6px; min-width: 128px; border: 1px solid var(--line); }
+  .win .ic { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; }
+  .win .ic img { width: 30px; }
+  .win b { font-size: 12.5px; display: block; }
+  .win span { font-size: 11px; color: var(--dim); }
+
+  /* promo banners */
+  .promo { margin: 0 14px 10px; border-radius: 20px; height: 82px; position: relative; overflow: hidden; padding: 14px 16px; }
+  .promo h4 { font-family: 'Lilita One', sans-serif; font-size: 22px; letter-spacing: .5px; }
+  .promo p { font-size: 12.5px; font-weight: 600; opacity: .92; }
+  .promo img { position: absolute; right: 8px; bottom: -8px; }
+
+  .filters { display: flex; gap: 6px; padding: 4px 14px 10px; }
+  .f { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--dim); padding: 7px 10px; border-radius: 10px; }
+  .f.on { background: var(--tile2); color: #fff; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 14px; }
+  .case { border-radius: 22px; background: linear-gradient(180deg, var(--tile2), var(--tile)); padding: 10px; text-align: center; position: relative; border: 1px solid var(--line); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 10px 20px rgba(0, 0, 0, .35); }
+  .case small { color: #6f7889; font-weight: 700; font-size: 11px; }
+  .case img { display: block; margin: 4px auto 6px; }
+  .price { display: inline-flex; align-items: center; gap: 5px; background: #2d3340; border-radius: 10px; padding: 5px 10px; font-weight: 800; font-size: 12.5px; }
+  .price i { width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffe28a, #f5a400); display: inline-block; }
+  .free { background: linear-gradient(160deg, #ff5a4f, #d81f26); border-radius: 22px; padding: 14px 12px; position: relative; overflow: hidden; grid-row: span 2; display: flex; flex-direction: column; }
+  .free h3 { font-family: 'Lilita One', sans-serif; font-size: 40px; line-height: .9; color: #ffd6d6; text-shadow: 0 3px 0 rgba(0, 0, 0, .2); }
+  .free img { margin: auto auto 6px; }
+  .bluebtn { background: var(--blue); color: #fff; border-radius: 14px; padding: 12px 14px; font-weight: 800; text-align: center; font-size: 14px; box-shadow: 0 6px 0 #1c45b8, 0 10px 18px rgba(47, 107, 255, .35); }
+  .greybtn { background: #2a2f3a; color: #fff; border-radius: 14px; padding: 12px 14px; font-weight: 800; text-align: center; font-size: 14px; box-shadow: 0 6px 0 #1b1f27; }
+
+  .tabbar { position: absolute; left: 12px; right: 12px; bottom: 14px; height: 66px; background: rgba(28, 31, 39, .95); border-radius: 22px; display: flex; align-items: center; justify-content: space-around; border: 1px solid var(--line); }
+  .tabbar span { display: grid; place-items: center; gap: 3px; font-size: 10.5px; color: #7e879a; font-weight: 700; }
+  .tabbar .hub { width: 58px; height: 58px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6c93ff, #2f6bff 60%); margin-top: -26px; box-shadow: 0 8px 20px rgba(47, 107, 255, .5); border: 4px solid var(--bg); }
+
+  /* detail screen */
+  .detail { background: radial-gradient(420px 360px at 50% 40%, rgba(255, 61, 120, .35), transparent 70%), var(--bg); }
+  .detail h2 { text-align: center; font-family: 'Lilita One', sans-serif; font-size: 30px; margin: 8px 0 0; }
+  .detail .stage { position: relative; height: 300px; display: grid; place-items: center; }
+  .puddle { position: absolute; bottom: 38px; width: 220px; height: 46px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 61, 120, .65), transparent); filter: blur(4px); }
+  .modes { display: flex; gap: 6px; background: #1a1d24; border-radius: 14px; padding: 5px; margin: 0 14px; }
+  .modes span { flex: 1; text-align: center; padding: 9px 0; border-radius: 10px; font-weight: 800; font-size: 13px; color: #7e879a; }
+  .modes span.on { background: var(--blue); color: #fff; }
+  .rules { margin: 12px 14px 0; background: var(--tile); border-radius: 16px; padding: 12px 14px; font-size: 12.5px; color: #c4cada; line-height: 1.5; border: 1px solid var(--line); }
+  .shield { display: inline-flex; align-items: center; gap: 6px; color: #7ee2a0; font-weight: 700; font-size: 12px; }
+
+  /* tournament */
+  .tour { background: radial-gradient(380px 340px at 50% 30%, rgba(139, 92, 246, .55), transparent 70%), var(--bg); }
+  .pool { text-align: center; margin-top: 6px; }
+  .pool small { font-weight: 700; color: #d8ccff; }
+  .pool h2 { font-family: 'Lilita One', sans-serif; font-size: 50px; line-height: 1; background: linear-gradient(180deg, #fff, #d7c4ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .digits { display: flex; gap: 6px; justify-content: center; margin-top: -8px; position: relative; }
+  .digits span { width: 36px; height: 44px; border-radius: 10px; background: #e9e9f2; color: #222; font-family: 'Lilita One', sans-serif; font-size: 22px; display: grid; place-items: center; box-shadow: inset 0 -4px 0 #c3c3d1; }
+  .timer { text-align: center; margin: 12px 0; }
+  .timer small { color: var(--dim); font-weight: 700; font-size: 12px; }
+  .timer b { display: block; font-family: 'Lilita One', sans-serif; font-size: 26px; letter-spacing: 1px; }
+  .board { margin: 0 14px; background: var(--bg2); border-radius: 18px; border: 1px solid var(--line); padding: 6px 12px; }
+  .brow { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .brow:last-child { border-bottom: 0; }
+  .brow img { width: 32px; }
+  .brow b { flex: 1; }
+  .dots { display: flex; gap: 4px; }
+  .dots i { width: 20px; height: 20px; border-radius: 50%; background: #2a2f3a; font-style: normal; font-size: 10px; font-weight: 800; display: grid; place-items: center; }
+  .dots i.w { background: var(--purple); }
+  .dots i.l { background: #3a2230; color: #ff8aa8; }
+
+  .system { max-width: 1240px; margin: 10px auto 60px; padding: 24px; background: #15171d; border: 1px solid var(--line); border-radius: 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .system h3 { font-family: 'Lilita One', sans-serif; font-size: 22px; margin-bottom: 10px; }
+  .sw { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sw i { width: 46px; height: 46px; border-radius: 14px; display: block; border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="nav-dirs">
+      <a href="index.html">All directions</a>
+      <a href="a-sticker-pop.html">A · Sticker Pop</a>
+      <a class="on" href="b-arcade-night.html">B · Arcade Night</a>
+      <a href="c-campus-quest.html">C · Campus Quest</a>
+      <a href="d-arena-pro.html">D · Arena Pro</a>
+        <a href="e-living-3d.html">E · Living 3D</a>
+    </div>
+    <h1>B · Arcade Night</h1>
+    <p>A premium game-hub feel: charcoal glass, glossy collectible tiles, a live "class wins" ticker and chunky pressable buttons. All the excitement of a gaming app, with XP instead of money so it stays safe for a class.</p>
+    <div class="chips"><span class="chip">Inspired by: Bang Studio Telegram app</span><span class="chip">+ Catbet layout &amp; prize pool</span><span class="chip">Dark mode</span><span class="chip">XP only, no betting</span></div>
+  </header>
+
+  <section class="phones">
+    <!-- ======================= HOME ======================= -->
+    <div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="appbar">
+          <div class="logo"><img src="../assets/3d/cap.png" alt="" />ARENA</div>
+          <div class="xp"><div><small>Your XP</small><b>1,240</b></div><span class="plus">+</span></div>
+          <div class="menu"><svg width="18" height="18" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></div>
+        </div>
+        <div class="live">
+          <div class="tab">LIVE</div>
+          <div class="win"><div class="ic" style="background:#3b2410"><img src="../assets/3d/bracket.png" alt="" /></div><div><b>Eric</b><span>won the Cup</span></div></div>
+          <div class="win"><div class="ic" style="background:#3a1430"><img src="../assets/3d/crush-board.png" alt="" /></div><div><b>+1 crush</b><span>to Grace</span></div></div>
+          <div class="win"><div class="ic" style="background:#13304a"><img src="../assets/3d/f1-lights.png" alt="" /></div><div><b>182 ms</b><span>Kevin</span></div></div>
+        </div>
+        <div class="promo" style="background:linear-gradient(100deg,#25a24a,#5fd068)">
+          <h4>INVITE CLASSMATES</h4><p>Get 2× XP this week · song of the day just dropped</p>
+                    <img class="glossy" src="../assets/3d/party.png" width="76" alt="" />
+        </div>
+        
+        <div class="filters">
+          <span class="f on"><img src="../assets/3d/games.png" width="16" alt="" />All</span>
+          <span class="f">Free</span><span class="f">New</span><span class="f">Popular</span>
+        </div>
+        <div class="grid">
+          <div class="free">
+            <h3>FREE<br/>DROP</h3>
+            <img class="glossy" src="../assets/3d/crush-board.png" width="96" alt="" />
+            <div class="bluebtn">Open Free</div>
+          </div>
+          <div class="case"><small>Confessions</small><img class="glossy" src="../assets/3d/confessions.png" width="60" alt="" /><span class="price"><i></i>40 XP</span></div>
+          <div class="case"><small>Rizz Meter</small><img class="glossy" src="../assets/3d/rizz-meter.png" width="60" alt="" /><span class="price"><i></i>25 XP</span></div>
+        </div>
+        <nav class="tabbar">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7e879a" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>Games</span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7e879a" stroke-width="2.2"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Weekly</span>
+          <span><span class="hub"><img src="../assets/3d/team-wheel.png" width="34" alt="" /></span></span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7e879a" stroke-width="2.2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/></svg>Ranks</span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7e879a" stroke-width="2.2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Me</span>
+        </nav>
+      </div>
+      <div class="label">Home · live wins, promos, collectible tiles</div>
+    </div>
+
+    <!-- ======================= GAME DETAIL ======================= -->
+    <div>
+      <div class="phone detail">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="appbar">
+          <div class="menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></div>
+          <div class="xp"><div><small>Your XP</small><b>1,240</b></div><span class="plus">+</span></div>
+        </div>
+        <h2>Secret Crush Board</h2>
+        <div class="stage">
+          <div class="puddle"></div>
+          <img class="glossy" src="../assets/3d/crush-board.png" width="210" alt="" style="position:relative" />
+          <img class="glossy" src="../assets/3d/heart.png" width="54" alt="" style="position:absolute;left:46px;top:40px;transform:rotate(-18deg)" />
+          <img class="glossy" src="../assets/3d/sparkling-heart.png" width="64" alt="" style="position:absolute;right:40px;top:24px;transform:rotate(14deg)" />
+        </div>
+        <div style="display:flex;gap:10px;padding:0 14px 12px">
+          <div class="bluebtn" style="flex:1.2">Post a crush · 25 XP</div>
+          <div class="greybtn" style="flex:1">Browse</div>
+        </div>
+        <div class="modes"><span class="on">All</span><span>Today</span><span>Hearted</span><span>Mine</span></div>
+        <div class="rules">
+          <span class="shield"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>Safe space</span><br/>
+          Names are never shown. Anything mean can be reported and is hidden after 3 reports.
+        </div>
+      </div>
+      <div class="label">Game detail · hero art, CTA, safety note</div>
+    </div>
+
+    <!-- ======================= TOURNAMENT ======================= -->
+    <div>
+      <div class="phone tour">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="pool"><small>Weekly eFootball Cup · XP pool</small><h2>50,000 XP</h2></div>
+        <div style="position:relative;height:230px;display:grid;place-items:center">
+          <img class="glossy" src="../assets/3d/bracket.png" width="190" alt="" />
+          <img class="glossy" src="../assets/3d/ball.png" width="62" alt="" style="position:absolute;left:42px;bottom:24px" />
+          <img class="glossy" src="../assets/3d/medal1.png" width="58" alt="" style="position:absolute;right:46px;top:30px;transform:rotate(12deg)" />
+        </div>
+        <div style="padding:0 70px"><div class="bluebtn" style="background:linear-gradient(180deg,#7cf2c3,#2fc58e);color:#05301f;box-shadow:0 6px 0 #1c8a61">JOIN THE CUP</div></div>
+        <div class="digits" style="margin-top:14px"><span>0</span><span>8</span><span>/</span><span>1</span><span>6</span></div>
+        <div class="timer"><small>Kick-off in</small><b>00:23:30:56</b></div>
+        <div class="board">
+          <div class="brow"><img src="../assets/3d/av-7.png" alt="" /><b>Eric · 7 pts</b><div class="dots"><i class="w">W</i><i class="w">W</i><i>D</i></div></div>
+          <div class="brow"><img src="../assets/3d/av-3.png" alt="" /><b>JP · 6 pts</b><div class="dots"><i class="w">W</i><i class="w">W</i><i class="l">L</i></div></div>
+          <div class="brow"><img src="../assets/3d/av-2.png" alt="" /><b>Diane · 5 pts</b><div class="dots"><i>D</i><i class="w">W</i><i>D</i></div></div>
+        </div>
+      </div>
+      <div class="label">Tournament · XP pool, countdown, form guide</div>
+    </div>
+  </section>
+
+  <section class="system">
+    <div><h3>Colour</h3><div class="sw"><i style="background:#111318"></i><i style="background:#1f232c"></i><i style="background:#2f6bff"></i><i style="background:#2fc552"></i><i style="background:#ff3d3d"></i><i style="background:#8b5cf6"></i><i style="background:#ffc531"></i></div></div>
+    <div><h3>Type</h3><div class="title" style="font-size:36px">Lilita One titles</div><div style="font-weight:700;color:#c4cada">Plus Jakarta Sans body</div></div>
+    <div><h3>Components</h3><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span class="bluebtn">Play</span><span class="greybtn">Practice</span><span class="price"><i></i>40 XP</span></div></div>
+  </section>
+</body>
+</html>

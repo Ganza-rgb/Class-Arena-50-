@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A · Sticker Pop — Class Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #111111;
+    --paper: #ffffff;
+    --lime: #d9f45b;
+    --sun: #fff27a;
+    --sky: #8fd0ff;
+    --sky2: #4f8fff;
+    --pink: #ff5c9d;
+    --orange: #ff8a1f;
+    --muted: #5b5b66;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #cfe6ff; color: var(--ink); }
+  a { color: inherit; }
+
+  /* ---------- page chrome ---------- */
+  .top { max-width: 1240px; margin: 0 auto; padding: 32px 20px 0; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; justify-content: space-between; }
+  .top h1 { font-family: Anton, sans-serif; font-size: 64px; line-height: .95; letter-spacing: .5px; text-transform: uppercase; }
+  .top p { max-width: 520px; font-size: 16px; color: #2a2a35; line-height: 1.5; margin-top: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { background: var(--paper); border: 2px solid var(--ink); border-radius: 999px; padding: 6px 12px; font-weight: 700; font-size: 13px; }
+  .nav-dirs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-dirs a { text-decoration: none; background: var(--ink); color: #fff; border-radius: 999px; padding: 10px 16px; font-weight: 700; font-size: 14px; }
+  .nav-dirs a.on { background: var(--pink); }
+
+  .phones { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; padding: 40px 16px 24px; }
+  .phone { width: 360px; height: 760px; border-radius: 48px; border: 10px solid #101014; overflow: hidden; position: relative; box-shadow: 0 30px 60px rgba(20, 40, 90, .28); }
+  .status { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-weight: 800; font-size: 15px; position: relative; z-index: 2; }
+  .status svg { height: 12px; }
+  .label { text-align: center; font-weight: 800; margin-top: 14px; font-size: 14px; color: #2a2a35; }
+
+  /* ---------- sticker art ---------- */
+  .stk { filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(0 10px 14px rgba(0, 0, 0, .22)); }
+  .huge { font-family: Anton, sans-serif; text-transform: uppercase; line-height: .9; letter-spacing: .5px; }
+
+  /* ---------- shared components ---------- */
+  .row { display: flex; align-items: center; }
+  .avatar { width: 46px; height: 46px; border-radius: 50%; background: #fff; border: 3px solid var(--ink); overflow: hidden; display: grid; place-items: end center; }
+  .avatar img { width: 42px; }
+  .bell { width: 46px; height: 46px; border-radius: 50%; background: #fff; display: grid; place-items: center; position: relative; box-shadow: 0 6px 14px rgba(0, 0, 0, .08); }
+  .bell b { position: absolute; left: -4px; top: -2px; background: var(--ink); color: #fff; border-radius: 999px; font-size: 11px; min-width: 20px; height: 20px; display: grid; place-items: center; }
+  .search { margin: 0 20px; height: 48px; border-radius: 999px; background: #fff; display: flex; align-items: center; gap: 10px; padding: 0 18px; color: #8a8a96; font-weight: 600; font-size: 14px; box-shadow: 0 8px 18px rgba(0, 0, 0, .06); }
+  .pillnav { position: absolute; left: 0; right: 0; bottom: 22px; display: flex; justify-content: center; gap: 10px; }
+  .pillnav .pair { display: flex; border: 3px solid var(--ink); border-radius: 999px; background: #fff; }
+  .pillnav .pair span { width: 48px; height: 48px; display: grid; place-items: center; }
+  .pillnav .pair span + span { border-left: 3px solid var(--ink); }
+  .pillnav .mid { width: 60px; height: 60px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; margin-top: -6px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 14px 22px; font-weight: 800; font-size: 15px; border: 3px solid var(--ink); background: var(--ink); color: #fff; }
+  .btn.ghost { background: #fff; color: var(--ink); }
+  .btn.pink { background: var(--pink); }
+  .safe { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #1d6b3a; background: #dcfbe6; border-radius: 999px; padding: 4px 10px; }
+
+  /* ---------- screen 1 : home ---------- */
+  .s1 { background: linear-gradient(180deg, #fff27a 0%, #fbff9e 40%, #ffffff 78%); }
+  .s1 .head { display: flex; justify-content: space-between; padding: 6px 20px 0; }
+  .s1 h2 { font-size: 66px; text-align: center; margin-top: 12px; }
+  .s1 .cluster { position: relative; height: 150px; margin-top: -14px; }
+  .s1 .cluster img { position: absolute; }
+  .s1 .sub { text-align: center; font-weight: 800; font-size: 22px; margin: 2px 0 12px; }
+  .steps { display: flex; gap: 14px; padding: 16px 20px 0; }
+  .step { flex: 1; position: relative; }
+  .step .num { font-family: Anton, sans-serif; font-size: 64px; color: var(--sky2); line-height: .8; position: absolute; left: -2px; top: -4px; }
+  .step .tile { margin-left: 28px; height: 96px; border-radius: 22px; border: 3px solid #fff; box-shadow: 0 10px 18px rgba(0, 0, 0, .12); display: grid; place-items: center; }
+  .step h4 { font-weight: 800; font-size: 15px; margin: 10px 0 0 28px; }
+  .step p { font-size: 12px; color: var(--muted); margin-left: 28px; line-height: 1.35; }
+
+  /* ---------- screen 2 : profile ---------- */
+  .s2 { background: linear-gradient(180deg, #8fd0ff 0%, #b9e2ff 45%, #ffffff 85%); }
+  .s2 .bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 20px; }
+  .circle { width: 46px; height: 46px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 6px 14px rgba(0, 0, 0, .08); }
+  .s2 h2 { font-size: 72px; text-align: center; margin-top: 4px; }
+  .s2 .hero { display: flex; align-items: center; justify-content: space-between; padding: 0 22px; margin-top: -6px; }
+  .s2 .stat b { font-family: Anton, sans-serif; font-size: 34px; display: block; line-height: 1; }
+  .s2 .stat span { font-size: 12px; font-weight: 700; color: #2b3a55; }
+  .s2 .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 4px 26px 0; }
+  .s2 .meta div { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; }
+  .badges { display: flex; justify-content: space-between; padding: 22px 26px 0; }
+  .hex { width: 88px; height: 96px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); display: grid; place-items: center; position: relative; }
+  .hex small { position: absolute; bottom: 10px; font-family: Anton, sans-serif; color: #fff; font-size: 16px; -webkit-text-stroke: 1px rgba(0, 0, 0, .25); }
+
+  /* ---------- screen 3 : party ---------- */
+  .s3 { background: linear-gradient(180deg, #d9f45b 0%, #e8fa96 45%, #ffffff 85%); }
+  .s3 h2 { font-size: 64px; text-align: center; margin-top: 6px; }
+  .s3 .crew { position: relative; height: 170px; }
+  .s3 .crew img { position: absolute; }
+  .friends { display: flex; gap: 10px; padding: 0 20px; overflow: hidden; }
+  .friend { min-width: 98px; background: #fff; border-radius: 18px; padding: 10px; text-align: center; box-shadow: 0 10px 18px rgba(0, 0, 0, .08); }
+  .friend img { width: 46px; }
+  .friend b { display: block; font-size: 12.5px; margin-top: 4px; }
+  .friend span { font-size: 11px; color: var(--muted); }
+  .games { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 20px 0; }
+  .g { border-radius: 20px; padding: 12px; display: flex; align-items: center; gap: 8px; border: 3px solid var(--ink); background: #fff; font-weight: 800; font-size: 13.5px; }
+
+  /* ---------- system strip ---------- */
+  .system { max-width: 1240px; margin: 10px auto 60px; padding: 24px; background: #fff; border: 3px solid var(--ink); border-radius: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .system h3 { font-family: Anton, sans-serif; font-size: 22px; text-transform: uppercase; margin-bottom: 10px; }
+  .sw { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sw i { width: 46px; height: 46px; border-radius: 14px; border: 2px solid var(--ink); display: block; }
+  .comp { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  @media (max-width: 420px) { .top h1 { font-size: 46px; } .phone { transform: scale(.92); } }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <div class="nav-dirs">
+        <a href="index.html">All directions</a>
+        <a class="on" href="a-sticker-pop.html">A · Sticker Pop</a>
+        <a href="b-arcade-night.html">B · Arcade Night</a>
+        <a href="c-campus-quest.html">C · Campus Quest</a>
+        <a href="d-arena-pro.html">D · Arena Pro</a>
+        <a href="e-living-3d.html">E · Living 3D</a>
+      </div>
+      <h1 style="margin-top:18px">A · Sticker Pop</h1>
+      <p>Bright, light and loud. Giant condensed headlines, 3D art cut out like stickers, and a chunky black pill nav. Feels like a fun magazine, not a casino, so it reads as a safe, friendly space.</p>
+      <div class="chips"><span class="chip">Inspired by: Welcome / James / Expedition</span><span class="chip">+ Victory stars</span><span class="chip">Light mode</span></div>
+    </div>
+  </header>
+
+  <section class="phones">
+    <!-- ======================= HOME ======================= -->
+    <div>
+      <div class="phone s1">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#111" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="head">
+          <div class="avatar"><img src="../assets/3d/av-1.png" alt="" /></div>
+          <div class="bell"><b>3</b><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></div>
+        </div>
+        <h2 class="huge">Hey, Diane!</h2>
+        <div class="cluster">
+          <img class="stk" src="../assets/3d/av-2.png" style="width:128px;left:110px;top:4px" alt="" />
+          <img class="stk" src="../assets/3d/crush-board.png" style="width:86px;left:34px;top:46px;transform:rotate(-14deg)" alt="" />
+          <img class="stk" src="../assets/3d/ball.png" style="width:72px;right:40px;top:58px;transform:rotate(12deg)" alt="" />
+          <img class="stk" src="../assets/3d/sparkling-heart.png" style="width:44px;right:70px;top:6px" alt="" />
+        </div>
+        <div class="sub">Your class is waiting</div>
+        <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a8a96" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search 58 games &amp; tools</div>
+        <div class="steps">
+          <div class="step">
+            <span class="num">1</span>
+            <div class="tile" style="background:linear-gradient(135deg,#ff9cc6,#ff5c9d)"><img class="stk" src="../assets/3d/confessions.png" style="width:64px" alt="" /></div>
+            <h4>Confessions</h4>
+            <p>3 new posts since you left</p>
+          </div>
+          <div class="step">
+            <span class="num">2</span>
+            <div class="tile" style="background:linear-gradient(135deg,#9ad5ff,#4f8fff)"><img class="stk" src="../assets/3d/bracket.png" style="width:62px" alt="" /></div>
+            <h4>eFootball Cup</h4>
+            <p>Semi-final vs Eric tonight</p>
+          </div>
+        </div>
+        <nav class="pillnav">
+          <div class="pair"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9H3z"/></svg></span><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4"><circle cx="11" cy="11" r="7"/></svg></span></div>
+          <div class="mid"><svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></div>
+          <div class="pair"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4"><path d="M4 5h16v11H8l-4 4z"/></svg></span><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/></svg></span></div>
+        </nav>
+      </div>
+      <div class="label">Home · “pick up where you left off”</div>
+    </div>
+
+    <!-- ======================= PROFILE ======================= -->
+    <div>
+      <div class="phone s2">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#111" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="bar">
+          <div class="circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></div>
+          <b style="font-size:18px">Overview</b>
+          <div class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.4"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></div>
+        </div>
+        <h2 class="huge">Diane</h2>
+        <div class="hero">
+          <div class="stat"><b>22</b><span>wins</span></div>
+          <img class="stk" src="../assets/3d/av-2.png" style="width:170px" alt="" />
+          <div class="stat" style="text-align:right"><b>14</b><span>crush hearts</span></div>
+        </div>
+        <div class="meta">
+          <div><img src="../assets/3d/fire.png" width="26" alt="" />17-day streak</div>
+          <div><img src="../assets/3d/star.png" width="26" alt="" />4,590 XP</div>
+          <div><img src="../assets/3d/ball.png" width="26" alt="" />League #3</div>
+          <div><img src="../assets/3d/medal2.png" width="26" alt="" />Silver Roaster</div>
+        </div>
+        <div class="badges">
+          <div class="hex" style="background:linear-gradient(160deg,#9ad5ff,#4f8fff)"><img src="../assets/3d/flappy.png" width="54" alt="" /><small>365</small></div>
+          <div class="hex" style="background:linear-gradient(160deg,#ffe36b,#ffb400)"><img src="../assets/3d/crown.png" width="54" alt="" /><small>100</small></div>
+          <div class="hex" style="background:linear-gradient(160deg,#c3a6ff,#7c4dff)"><img src="../assets/3d/simon.png" width="54" alt="" /><small>50</small></div>
+        </div>
+        <div style="padding:20px 22px 0"><span class="safe"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg> Your anonymous posts never show on your profile</span></div>
+      </div>
+      <div class="label">Profile · streaks, XP & badges</div>
+    </div>
+
+    <!-- ======================= PARTY ======================= -->
+    <div>
+      <div class="phone s3">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#111" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <h2 class="huge">Party Time</h2>
+        <div class="crew">
+          <img class="stk" src="../assets/3d/av-3.png" style="width:110px;left:24px;top:30px;transform:rotate(-6deg)" alt="" />
+          <img class="stk" src="../assets/3d/av-6.png" style="width:120px;left:118px;top:8px" alt="" />
+          <img class="stk" src="../assets/3d/av-5.png" style="width:106px;right:22px;top:34px;transform:rotate(6deg)" alt="" />
+          <img class="stk" src="../assets/3d/party.png" style="width:58px;left:150px;top:116px" alt="" />
+        </div>
+        <div style="text-align:center;font-weight:800;font-size:22px;margin:4px 0 12px">Build your squad</div>
+        <div class="friends">
+          <div class="friend"><img src="../assets/3d/av-1.png" alt="" /><b>Kevin</b><span>K-Mug</span></div>
+          <div class="friend"><img src="../assets/3d/av-4.png" alt="" /><b>Sandra</b><span>San</span></div>
+          <div class="friend"><img src="../assets/3d/av-7.png" alt="" /><b>Eric</b><span>Skill Moves</span></div>
+          <div class="friend"><img src="../assets/3d/av-8.png" alt="" /><b>Grace</b><span>Gracie</span></div>
+        </div>
+        <div class="games">
+          <div class="g"><img src="../assets/3d/imposter.png" width="34" alt="" />Imposter</div>
+          <div class="g"><img src="../assets/3d/truth-dare.png" width="34" alt="" />Truth or Dare</div>
+          <div class="g"><img src="../assets/3d/bomb.png" width="34" alt="" />Hot Potato</div>
+          <div class="g"><img src="../assets/3d/wyr.png" width="34" alt="" />Would You…</div>
+        </div>
+        <div style="padding:16px 20px 0"><span class="btn" style="width:100%;justify-content:center">Start party with 4 →</span></div>
+      </div>
+      <div class="label">Party · squad & pass-the-phone games</div>
+    </div>
+  </section>
+
+  <section class="system">
+    <div>
+      <h3>Colour</h3>
+      <div class="sw"><i style="background:#fff27a"></i><i style="background:#d9f45b"></i><i style="background:#8fd0ff"></i><i style="background:#4f8fff"></i><i style="background:#ff5c9d"></i><i style="background:#111"></i></div>
+    </div>
+    <div>
+      <h3>Type</h3>
+      <div class="huge" style="font-size:40px">Anton Headlines</div>
+      <div style="font-weight:700">Plus Jakarta Sans for everything else</div>
+    </div>
+    <div>
+      <h3>Components</h3>
+      <div class="comp"><span class="btn">Play now →</span><span class="btn ghost">Later</span><span class="btn pink">Drop crush</span><span class="safe"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg> Anonymous &amp; safe</span></div>
+    </div>
+  </section>
+</body>
+</html>

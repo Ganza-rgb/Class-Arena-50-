@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>D · Arena Pro — Class Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0d0a1c;
+    --card: #191335;
+    --card2: #221a45;
+    --line: rgba(160, 130, 255, .18);
+    --text: #f5f2ff;
+    --dim: #a59cc9;
+    --violet: #7c4dff;
+    --violet2: #a47bff;
+    --gold: #ffc23d;
+    --green: #2ed47a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Poppins, system-ui, sans-serif; background: radial-gradient(1000px 600px at 50% -10%, #2b1766, transparent 60%), #08060f; color: var(--text); min-height: 100vh; }
+  .top { max-width: 1240px; margin: 0 auto; padding: 32px 20px 0; }
+  .top h1 { font-weight: 800; font-style: italic; font-size: 56px; line-height: 1; margin-top: 18px; background: linear-gradient(90deg, #fff, #c6b2ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .top p { max-width: 560px; line-height: 1.55; margin-top: 10px; color: #c9c2e6; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; font-weight: 600; font-size: 13px; color: #d6cff5; }
+  .nav-dirs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-dirs a { text-decoration: none; background: var(--card); color: #fff; border-radius: 999px; padding: 9px 16px; font-weight: 600; font-size: 14px; border: 1px solid var(--line); }
+  .nav-dirs a.on { background: var(--violet); }
+
+  .phones { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; padding: 40px 16px 24px; }
+  .phone { width: 360px; height: 760px; border-radius: 48px; overflow: hidden; position: relative; background: var(--bg); border: 2px solid rgba(164, 123, 255, .55); box-shadow: 0 0 0 8px #0a0716, 0 30px 70px rgba(80, 40, 200, .35); }
+  .status { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font-weight: 600; font-size: 15px; }
+  .status svg { height: 12px; fill: #fff; }
+  .label { text-align: center; font-weight: 600; margin-top: 14px; font-size: 14px; color: #a59cc9; }
+  .pad { padding: 0 18px; }
+
+  .avatar { width: 52px; height: 52px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, #c6b2ff, #7c4dff); position: relative; }
+  .avatar span { width: 100%; height: 100%; border-radius: 50%; background: var(--card2); display: grid; place-items: end center; overflow: hidden; }
+  .avatar img { width: 46px; }
+  .bell { margin-left: auto; position: relative; }
+  .bell b { position: absolute; right: -6px; top: -6px; background: #ff3b5c; color: #fff; font-size: 10px; border-radius: 999px; min-width: 18px; height: 18px; display: grid; place-items: center; }
+  .xpbar { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .08); overflow: hidden; margin-top: 6px; }
+  .xpbar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #a47bff, #7c4dff); }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; }
+  .challenge { position: relative; overflow: hidden; border-radius: 24px; padding: 16px; background: linear-gradient(135deg, #5b2fd6, #3a1a9a 60%, #24125f); border: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 16px 30px rgba(92, 47, 214, .35); }
+  .challenge img { position: absolute; right: 6px; bottom: 4px; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .45)); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 10px 18px; font-weight: 700; font-size: 14px; }
+  .btn.white { background: #fff; color: #2a1670; }
+  .btn.violet { background: linear-gradient(90deg, #a47bff, #7c4dff); color: #fff; box-shadow: 0 8px 18px rgba(124, 77, 255, .45); }
+  .head { display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px; }
+  .head h3 { font-size: 18px; font-weight: 700; }
+  .head a { color: var(--violet2); font-size: 13px; font-weight: 600; text-decoration: none; }
+  .explore { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ex { border-radius: 18px; padding: 12px; text-align: center; border: 1px solid var(--line); }
+  .ex img { width: 44px; }
+  .ex b { display: block; font-size: 14px; margin-top: 2px; }
+  .ex span { font-size: 11.5px; color: var(--dim); }
+
+  .tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 74px; background: #120d26; border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; padding-bottom: 6px; }
+  .tabbar span { display: grid; justify-items: center; gap: 3px; font-size: 10.5px; color: #8f86b5; font-weight: 600; }
+  .tabbar span.on { color: var(--violet2); }
+
+  /* quiz */
+  .timer { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 12px; font-weight: 700; }
+  .opt { margin: 9px 18px 0; padding: 13px; text-align: center; border-radius: 16px; background: var(--card); border: 1px solid var(--line); font-weight: 600; }
+  .opt.on { background: linear-gradient(90deg, #a47bff, #7c4dff); border-color: transparent; box-shadow: 0 8px 18px rgba(124, 77, 255, .45); }
+
+  /* leaderboard */
+  .seg { display: flex; gap: 6px; }
+  .seg span { padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 13px; color: var(--dim); background: var(--card); border: 1px solid var(--line); }
+  .seg span.on { background: var(--violet); color: #fff; border-color: transparent; }
+  .podium { display: flex; align-items: flex-end; justify-content: center; gap: 8px; margin-top: 18px; }
+  .pod { width: 96px; text-align: center; }
+  .pod .face { width: 66px; height: 66px; border-radius: 50%; margin: 0 auto -10px; position: relative; z-index: 2; background: var(--card2); border: 3px solid #fff; display: grid; place-items: end center; overflow: hidden; }
+  .pod .face img { width: 60px; }
+  .pod .blk { border-radius: 16px 16px 0 0; padding: 18px 4px 10px; }
+  .pod .blk b { font-size: 30px; font-weight: 800; display: block; line-height: 1; }
+  .pod .blk small { display: block; font-weight: 700; font-size: 13px; }
+  .pod .blk span { font-size: 11px; opacity: .85; }
+  .lrow { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; margin: 6px 18px 0; background: var(--card); border: 1px solid var(--line); font-size: 14px; }
+  .lrow img { width: 34px; }
+  .lrow b { flex: 1; font-weight: 600; }
+  .lrow.me { border: 1.5px solid var(--violet2); background: #2a1d5c; color: #ffd97a; }
+
+  .system { max-width: 1240px; margin: 10px auto 60px; padding: 24px; background: #120d26; border: 1px solid var(--line); border-radius: 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .system h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+  .sw { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sw i { width: 46px; height: 46px; border-radius: 14px; display: block; border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="nav-dirs">
+      <a href="index.html">All directions</a>
+      <a href="a-sticker-pop.html">A · Sticker Pop</a>
+      <a href="b-arcade-night.html">B · Arcade Night</a>
+      <a href="c-campus-quest.html">C · Campus Quest</a>
+      <a class="on" href="d-arena-pro.html">D · Arena Pro</a>
+      <a href="e-living-3d.html">E · Living 3D</a>
+    </div>
+    <h1>D · Arena Pro</h1>
+    <p>The calm, polished take. One violet accent, generous spacing, levels and XP everywhere, and a clear leaderboard with “You” highlighted. Least risky and easiest to scale. It feels like a real product your whole class trusts.</p>
+    <div class="chips"><span class="chip">Inspired by: Entertainment Arena</span><span class="chip">+ XP/levels from Expedition</span><span class="chip">Dark, single accent</span></div>
+  </header>
+
+  <section class="phones">
+    <!-- ======================= HOME ======================= -->
+    <div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="pad" style="display:flex;align-items:center;gap:12px">
+          <div class="avatar"><span><img src="../assets/3d/av-1.png" alt="" /></span></div>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:18px">Hello, Kevin</div>
+            <div style="font-size:12.5px;color:var(--dim)">Level 8 · 1,240 XP</div>
+            <div class="xpbar"><i style="width:72%"></i></div>
+          </div>
+          <div class="bell"><b>2</b><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></div>
+        </div>
+        <div class="pad" style="margin-top:16px">
+          <div class="challenge" style="height:170px">
+            <div style="display:flex;justify-content:space-between;font-weight:700;font-size:13px"><span>Today’s challenge</span><span style="opacity:.8">2h 15m left</span></div>
+            <div style="font-size:22px;font-weight:800;margin-top:8px;line-height:1.15">Iconic Commentary<br/>Quiz</div>
+            <div style="font-size:12.5px;opacity:.85;margin-top:4px">8 questions · +50 XP</div>
+            <span class="btn white" style="margin-top:12px">Join now →</span>
+            <img src="../assets/3d/commentary.png" width="110" alt="" />
+          </div>
+          <div class="head"><h3>Explore Arena</h3><a href="#">See all →</a></div>
+          <div class="explore">
+            <div class="ex" style="background:linear-gradient(160deg,#2a2160,#1a1440)"><img src="../assets/3d/games.png" alt="" /><b>Games</b><span>58 to play</span></div>
+            <div class="ex" style="background:linear-gradient(160deg,#3a2a12,#1f170c)"><img src="../assets/3d/ranking.png" alt="" /><b>Rankings</b><span>Top players</span></div>
+            <div class="ex" style="background:linear-gradient(160deg,#0f3a35,#0b231f)"><img src="../assets/3d/confessions.png" alt="" /><b>Anon Lounge</b><span>Safe &amp; anonymous</span></div>
+            <div class="ex" style="background:linear-gradient(160deg,#3a1236,#220b20)"><img src="../assets/3d/songs.png" alt="" /><b>Vibes</b><span>Songs &amp; memes</span></div>
+          </div>
+        </div>
+        <nav class="tabbar">
+          <span class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="#a47bff"><path d="M3 11 12 4l9 7v9h-6v-6H9v6H3z"/></svg>Home</span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8f86b5" stroke-width="2"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/></svg>Play</span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8f86b5" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/></svg>Arena</span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8f86b5" stroke-width="2"><path d="M4 5h16v11H8l-4 4z"/></svg>Social</span>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8f86b5" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profile</span>
+        </nav>
+      </div>
+      <div class="label">Home · level, daily challenge, explore</div>
+    </div>
+
+    <!-- ======================= QUIZ ======================= -->
+    <div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="pad" style="display:flex;justify-content:space-between;align-items:center">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+          <span class="timer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>00:45</span>
+        </div>
+        <div style="text-align:center;color:var(--dim);margin-top:18px;font-weight:600">Question 3 / 8</div>
+        <div style="text-align:center;font-weight:700;font-size:21px;margin:8px 26px 0;line-height:1.3">“Corner taken quickly… ORIGI!” Which match?</div>
+        <div style="display:grid;place-items:center;height:190px;position:relative">
+          <div style="position:absolute;width:170px;height:170px;border-radius:50%;background:radial-gradient(closest-side,rgba(124,77,255,.45),transparent)"></div>
+          <img src="../assets/3d/commentary.png" width="150" alt="" style="position:relative;filter:drop-shadow(0 14px 20px rgba(0,0,0,.5))" />
+        </div>
+        <div class="opt">Liverpool 3–3 Milan, 2005</div>
+        <div class="opt on">Liverpool 4–0 Barcelona, 2019</div>
+        <div class="opt">Everton derby, 2018</div>
+        <div class="opt">Liverpool vs Tottenham, 2019</div>
+        <div style="text-align:center;margin-top:16px;font-weight:700;color:var(--gold);display:flex;justify-content:center;gap:6px;align-items:center"><img src="../assets/3d/star.png" width="22" alt="" />+10 XP</div>
+        <div class="pad" style="margin-top:14px"><div class="xpbar" style="height:10px"><i style="width:38%"></i></div></div>
+      </div>
+      <div class="label">In-game · focused, one decision at a time</div>
+    </div>
+
+    <!-- ======================= LEADERBOARD ======================= -->
+    <div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><svg viewBox="0 0 60 12"><rect x="0" y="6" width="3" height="6" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/><rect x="36" y="1" width="22" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="38" y="3" width="16" height="6" rx="1.5"/></svg></div>
+        <div class="pad" style="display:flex;align-items:center;gap:12px">
+          <img src="../assets/3d/ranking.png" width="56" alt="" />
+          <div><div style="font-weight:800;font-size:24px">Leaderboard</div><div style="color:var(--dim);font-size:13px">eFootball league · this week</div></div>
+        </div>
+        <div class="pad" style="margin-top:14px"><div class="seg"><span>Global</span><span class="on">Class</span><span>Friends</span></div></div>
+        <div class="podium">
+          <div class="pod"><div class="face"><img src="../assets/3d/av-3.png" alt="" /></div><div class="blk" style="height:120px;background:linear-gradient(180deg,#6b5bd6,#3c2e8f)"><b>2</b><small>JP</small><span>6 pts</span></div></div>
+          <div class="pod"><img src="../assets/3d/crown.png" width="40" alt="" style="margin-bottom:-6px" /><div class="face"><img src="../assets/3d/av-7.png" alt="" /></div><div class="blk" style="height:150px;background:linear-gradient(180deg,#ffd666,#e09a00);color:#3a2500"><b>1</b><small>Eric</small><span>7 pts</span></div></div>
+          <div class="pod"><div class="face"><img src="../assets/3d/av-2.png" alt="" /></div><div class="blk" style="height:100px;background:linear-gradient(180deg,#e0794a,#a84418)"><b>3</b><small>Diane</small><span>5 pts</span></div></div>
+        </div>
+        <div class="lrow"><span style="color:var(--dim);width:16px">4</span><img src="../assets/3d/av-5.png" alt="" /><b>Brian</b><span style="color:var(--violet2);font-weight:700">5 pts</span></div>
+        <div class="lrow me"><span style="width:16px">5</span><img src="../assets/3d/av-1.png" alt="" /><b>You (Kevin)</b><span style="font-weight:700">1 pt</span></div>
+        <div class="lrow"><span style="color:var(--dim);width:16px">6</span><img src="../assets/3d/av-8.png" alt="" /><b>David</b><span style="color:var(--violet2);font-weight:700">1 pt</span></div>
+        <div class="lrow"><span style="color:var(--dim);width:16px">7</span><img src="../assets/3d/av-4.png" alt="" /><b>Patrick</b><span style="color:var(--violet2);font-weight:700">1 pt</span></div>
+      </div>
+      <div class="label">Leaderboard · podium &amp; “You” highlight</div>
+    </div>
+  </section>
+
+  <section class="system">
+    <div><h3>Colour</h3><div class="sw"><i style="background:#0d0a1c"></i><i style="background:#191335"></i><i style="background:#7c4dff"></i><i style="background:#a47bff"></i><i style="background:#ffc23d"></i><i style="background:#2ed47a"></i></div></div>
+    <div><h3>Type</h3><div style="font-weight:800;font-style:italic;font-size:32px">Poppins ExtraBold</div><div style="color:#c9c2e6">Poppins Medium body</div></div>
+    <div><h3>Components</h3><div style="display:flex;gap:10px;flex-wrap:wrap"><span class="btn violet">Play ▸</span><span class="btn white">Join now →</span><span class="timer">00:45</span></div></div>
+  </section>
+</body>
+</html>

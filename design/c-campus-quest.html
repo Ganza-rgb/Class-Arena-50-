@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>C · Campus Quest — Class Arena</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Roboto+Slab:wght@700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --sky: #bfe7f7;
+    --grass: #6dbb52;
+    --grass2: #4e9b3c;
+    --water: #46b9d6;
+    --earth: #4a2c20;
+    --earth2: #5d3828;
+    --orange: #f28a26;
+    --orange2: #c9640e;
+    --stone: #eceae3;
+    --stone2: #cfcbbf;
+    --gold: #f6b80b;
+    --ink: #3d3a35;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Fredoka, system-ui, sans-serif; background: linear-gradient(180deg, #f6ecd2, #efe0b9); color: var(--ink); min-height: 100vh; }
+  .top { max-width: 1240px; margin: 0 auto; padding: 32px 20px 0; }
+  .top h1 { font-family: 'Roboto Slab', serif; font-weight: 900; font-size: 60px; line-height: 1; margin-top: 18px; color: #6b6458; }
+  .top p { max-width: 560px; line-height: 1.5; margin-top: 10px; font-size: 17px; color: #5a5348; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { background: #fff8e6; border: 2px solid #e2d3ad; border-radius: 999px; padding: 5px 12px; font-weight: 600; font-size: 13px; }
+  .nav-dirs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-dirs a { text-decoration: none; background: #fff8e6; color: var(--ink); border-radius: 14px; padding: 9px 15px; font-weight: 600; font-size: 14px; border: 2px solid #e2d3ad; }
+  .nav-dirs a.on { background: var(--orange); color: #fff; border-color: var(--orange2); }
+
+  .phones { display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; padding: 40px 16px 24px; }
+  .phone { width: 360px; height: 760px; border-radius: 52px; overflow: hidden; position: relative; box-shadow: 0 30px 60px rgba(90, 60, 20, .3); }
+  .label { text-align: center; font-weight: 600; margin-top: 14px; font-size: 15px; color: #6b6458; }
+
+  /* ---------- chunky primitives ---------- */
+  .stonebtn { width: 50px; height: 50px; border-radius: 18px; background: linear-gradient(180deg, #fbfaf6, var(--stone)); box-shadow: inset 0 -5px 0 var(--stone2), 0 6px 12px rgba(0, 0, 0, .25); display: grid; place-items: center; }
+  .coins { display: flex; align-items: center; background: linear-gradient(180deg, #a8481d, #7d300f); color: #ffe7b8; font-weight: 700; font-size: 18px; border-radius: 12px; padding: 4px 4px 4px 12px; gap: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, .3); }
+  .coin { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe680, var(--gold) 55%, #c98a00); border: 2px solid #b37800; display: grid; place-items: center; color: #8a5a00; font-weight: 700; font-size: 15px; }
+  .chunky { display: block; text-align: center; font-family: 'Roboto Slab', serif; font-weight: 800; font-size: 28px; color: #fff3df; padding: 12px 0 14px; border-radius: 20px; background: linear-gradient(180deg, #ff9a3c, var(--orange) 60%); box-shadow: inset 0 -7px 0 var(--orange2), 0 10px 18px rgba(0, 0, 0, .3); text-shadow: 0 2px 0 rgba(0, 0, 0, .2); }
+  .chunky.gold { background: linear-gradient(180deg, #ffd25c, #f5ae1c 60%); box-shadow: inset 0 -7px 0 #b97c00, 0 10px 18px rgba(0, 0, 0, .3); color: #7a4a00; text-shadow: 0 2px 0 rgba(255, 255, 255, .3); }
+  .plaque { background: linear-gradient(180deg, #f8f7f2, var(--stone)); border-radius: 30px 40px 26px 34px; box-shadow: inset 0 -8px 0 var(--stone2), 0 14px 24px rgba(0, 0, 0, .28); text-align: center; position: relative; }
+  .slab { font-family: 'Roboto Slab', serif; font-weight: 900; color: #8d9a8b; }
+  .cloud { position: absolute; background: #fff; border-radius: 50%; filter: blur(6px); opacity: .9; }
+
+  /* ---------- map ---------- */
+  .map { background: radial-gradient(120px 90px at 70% 28%, #7fd4ea, transparent 70%), linear-gradient(180deg, #9fdcf0 0%, #8fd0e0 12%, var(--grass) 22%, #5fae48 60%, #4f9a3c 100%); }
+  .map svg.paths { position: absolute; inset: 0; }
+  .node { position: absolute; width: 64px; height: 64px; border-radius: 22px; background: linear-gradient(180deg, #fbfaf6, var(--stone)); box-shadow: inset 0 -6px 0 var(--stone2), 0 8px 14px rgba(0, 0, 0, .3); display: grid; place-items: center; font-family: 'Roboto Slab', serif; font-weight: 900; font-size: 30px; color: #8d9a8b; }
+  .node img { position: absolute; width: 40px; top: -26px; right: -14px; filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .3)); }
+  .node.done { background: linear-gradient(180deg, #ffb35c, var(--orange)); box-shadow: inset 0 -6px 0 var(--orange2), 0 8px 14px rgba(0, 0, 0, .3); color: #fff3df; }
+  .you { position: absolute; display: grid; justify-items: center; }
+  .you .bub { background: #fff; border-radius: 10px; padding: 2px 8px; font-weight: 700; font-size: 13px; box-shadow: 0 3px 6px rgba(0, 0, 0, .2); }
+  .you .face { width: 50px; height: 50px; border-radius: 50%; background: #e9f6ff; border: 3px solid #fff; overflow: hidden; display: grid; place-items: end center; box-shadow: 0 6px 10px rgba(0, 0, 0, .3); }
+  .tree { position: absolute; width: 46px; height: 46px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #7fd05f, #3f8a2f); box-shadow: 0 6px 6px rgba(0, 0, 0, .25); }
+
+  /* ---------- victory ---------- */
+  .victory { background: linear-gradient(180deg, #cfeeff 0%, #e9f7ff 30%, #8fcf6a 55%, #4b8f38 100%); }
+  .victory .stars { display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
+  .star { width: 34px; height: 34px; clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: linear-gradient(180deg, #ffd84a, #f0a400); }
+  .star.off { background: #c9c9c9; }
+  .medalrow { display: flex; justify-content: center; gap: -8px; position: absolute; top: -40px; left: 0; right: 0; }
+  .medalrow .coin { width: 54px; height: 54px; font-size: 20px; margin: 0 -6px; }
+  .medalrow .coin.big { width: 64px; height: 64px; margin-top: -10px; z-index: 2; }
+
+  /* ---------- settings ---------- */
+  .settings { background: linear-gradient(180deg, #bfe7f7 0%, #d8f1fb 26%, var(--earth2) 26.1%, var(--earth) 100%); }
+  .slider { height: 42px; border-radius: 12px; background: #6b3a24; box-shadow: inset 0 4px 0 rgba(0, 0, 0, .25); position: relative; margin: 10px 26px 0; }
+  .slider .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 12px; background: linear-gradient(180deg, #ff9a3c, var(--orange)); box-shadow: inset 0 -5px 0 var(--orange2); }
+  .slider .knob { position: absolute; top: -9px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(180deg, #ffc54d, #f39a12); border: 4px solid #fff3df; box-shadow: 0 6px 10px rgba(0, 0, 0, .35); display: grid; place-items: center; }
+  .slider .knob img { width: 34px; }
+  .setlabel { text-align: center; color: #ffb066; font-weight: 600; font-size: 18px; margin-top: 26px; }
+  .toggle { display: flex; align-items: center; justify-content: space-between; margin: 22px 26px 0; color: #ffe7c6; font-weight: 600; font-size: 17px; }
+  .pill { width: 70px; height: 38px; border-radius: 999px; background: linear-gradient(180deg, #8ad35c, #4f9a3c); box-shadow: inset 0 -4px 0 #3a7a2c; position: relative; }
+  .pill::after { content: ''; position: absolute; right: 4px; top: 3px; width: 30px; height: 30px; border-radius: 50%; background: #fff; box-shadow: 0 3px 4px rgba(0, 0, 0, .3); }
+
+  .system { max-width: 1240px; margin: 10px auto 60px; padding: 24px; background: #fff8e6; border: 2px solid #e2d3ad; border-radius: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+  .system h3 { font-family: 'Roboto Slab', serif; font-weight: 900; font-size: 22px; margin-bottom: 10px; color: #6b6458; }
+  .sw { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sw i { width: 46px; height: 46px; border-radius: 14px; display: block; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .15); }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="nav-dirs">
+      <a href="index.html">All directions</a>
+      <a href="a-sticker-pop.html">A · Sticker Pop</a>
+      <a href="b-arcade-night.html">B · Arcade Night</a>
+      <a class="on" href="c-campus-quest.html">C · Campus Quest</a>
+      <a href="d-arena-pro.html">D · Arena Pro</a>
+        <a href="e-living-3d.html">E · Living 3D</a>
+    </div>
+    <h1>C · Campus Quest</h1>
+    <p>The app as a cozy adventure. Your class travels a path of islands, each stop a game, with stone plaques, chunky buttons you want to press, and coins for playing. Warm, safe and the most "missable": you come back to see the next island.</p>
+    <div class="chips"><span class="chip">Inspired by: Angry Settings / Victory / level map</span><span class="chip">+ Expedition progression</span><span class="chip">Daylight</span></div>
+  </header>
+
+  <section class="phones">
+    <!-- ======================= MAP ======================= -->
+    <div>
+      <div class="phone map">
+        <div class="cloud" style="width:120px;height:50px;left:-20px;top:40px"></div>
+        <div class="cloud" style="width:150px;height:60px;right:-40px;top:96px"></div>
+        <div class="cloud" style="width:140px;height:60px;left:-30px;bottom:-10px"></div>
+        <div class="cloud" style="width:160px;height:64px;right:-30px;bottom:6px"></div>
+        <div class="tree" style="left:22px;top:300px"></div>
+        <div class="tree" style="left:290px;top:420px;width:56px;height:56px"></div>
+        <div class="tree" style="left:40px;top:520px;width:38px;height:38px"></div>
+        <svg class="paths" viewBox="0 0 340 740" preserveAspectRatio="none">
+          <path d="M-20 360 C 60 340, 120 420, 200 400 S 330 330, 380 380" fill="none" stroke="#46b9d6" stroke-width="46" stroke-linecap="round" opacity=".95"/>
+          <path d="M-20 360 C 60 340, 120 420, 200 400 S 330 330, 380 380" fill="none" stroke="#7fd8ec" stroke-width="12" stroke-linecap="round" opacity=".6"/>
+          <path d="M70 640 C 120 600, 70 540, 140 500 S 260 470, 250 400 S 120 330, 160 260 S 280 200, 250 120" fill="none" stroke="#eceae3" stroke-width="22" stroke-linecap="round"/>
+          <path d="M70 640 C 120 600, 70 540, 140 500" fill="none" stroke="#c96a2a" stroke-width="22" stroke-linecap="round"/>
+          <path d="M70 640 C 120 600, 70 540, 140 500 S 260 470, 250 400 S 120 330, 160 260 S 280 200, 250 120" fill="none" stroke="#f6b80b" stroke-width="4" stroke-dasharray="2 18" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;top:52px;left:18px" class="stonebtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8d9a8b" stroke-width="3" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></div>
+        <div style="position:absolute;top:58px;right:18px" class="coins">59,927<span class="coin">C</span></div>
+        <div class="node done" style="left:40px;top:604px">1<img src="../assets/3d/confessions.png" alt="" /></div>
+        <div class="node done" style="left:110px;top:466px">2<img src="../assets/3d/rizz-meter.png" alt="" /></div>
+        <div class="node" style="left:218px;top:368px">3<img src="../assets/3d/bracket.png" alt="" /></div>
+        <div class="node" style="left:128px;top:228px">4<img src="../assets/3d/imposter.png" alt="" /></div>
+        <div class="node" style="left:206px;top:136px">5<img src="../assets/3d/songs.png" alt="" /></div>
+        <div class="you" style="left:184px;top:470px"><span class="bub">You!</span><span class="face"><img src="../assets/3d/av-2.png" width="46" alt="" /></span></div>
+      </div>
+      <div class="label">Class map · each island is a game</div>
+    </div>
+
+    <!-- ======================= VICTORY ======================= -->
+    <div>
+      <div class="phone victory">
+        <div class="cloud" style="width:160px;height:60px;left:-40px;top:60px"></div>
+        <div class="cloud" style="width:130px;height:50px;right:-30px;top:120px"></div>
+        <div style="display:flex;justify-content:space-between;padding:52px 18px 0">
+          <div class="stonebtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8d9a8b" stroke-width="3" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9H3z"/></svg></div>
+          <div class="coins">59,927<span class="coin">C</span></div>
+        </div>
+        <div class="plaque" style="margin:84px 34px 0;padding:46px 16px 22px">
+          <div class="medalrow"><span class="coin">C</span><span class="coin big">98</span><span class="coin">C</span></div>
+          <div style="color:#8d9a8b;font-weight:600">Rizz Meter · level 2 complete</div>
+          <div class="slab" style="font-size:54px;line-height:1.05">Victory</div>
+          <div class="stars"><span class="star"></span><span class="star"></span><span class="star off"></span></div>
+        </div>
+        <img src="../assets/3d/rizz-meter.png" width="170" alt="" style="position:absolute;left:-18px;top:410px;filter:drop-shadow(0 12px 10px rgba(0,0,0,.35));transform:rotate(-10deg)" />
+        <img src="../assets/3d/two-hearts.png" width="80" alt="" style="position:absolute;right:20px;top:400px;filter:drop-shadow(0 8px 8px rgba(0,0,0,.3))" />
+        <div style="position:absolute;left:110px;right:34px;bottom:120px"><span class="chunky">Restart</span></div>
+        <div style="position:absolute;left:110px;right:34px;bottom:40px"><span class="chunky gold">Next</span></div>
+      </div>
+      <div class="label">Win screen · coins, stars, big buttons</div>
+    </div>
+
+    <!-- ======================= SETTINGS ======================= -->
+    <div>
+      <div class="phone settings">
+        <div class="cloud" style="width:140px;height:56px;left:-30px;top:80px"></div>
+        <div class="cloud" style="width:150px;height:56px;right:-40px;top:40px"></div>
+        <div style="display:flex;justify-content:space-between;padding:52px 18px 0;position:relative">
+          <div class="stonebtn" style="border-radius:50%"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8d9a8b" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div>
+          <div class="coins">59,927<span class="coin">C</span></div>
+        </div>
+        <div style="position:relative;margin:26px 30px 0">
+          <img src="../assets/3d/eyes.png" width="96" alt="" style="position:absolute;left:50%;top:-56px;transform:translateX(-50%);filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))" />
+          <div class="plaque" style="padding:44px 10px 20px"><div class="slab" style="font-size:44px;line-height:1">Class<br/>Settings</div></div>
+        </div>
+        <div class="setlabel">Music</div>
+        <div class="slider"><div class="fill" style="width:62%"></div><div class="knob" style="left:calc(62% - 30px)"><img src="../assets/3d/notes.png" alt="" /></div></div>
+        <div class="setlabel">Sound FX</div>
+        <div class="slider"><div class="fill" style="width:36%"></div><div class="knob" style="left:calc(36% - 30px)"><img src="../assets/3d/speaker.png" alt="" /></div></div>
+        <div class="toggle" style="margin-top:34px"><span>Hide spicy games</span><span class="pill"></span></div>
+        <div class="toggle"><span>Anonymous by default</span><span class="pill"></span></div>
+      </div>
+      <div class="label">Settings · tactile sliders &amp; safety toggles</div>
+    </div>
+  </section>
+
+  <section class="system">
+    <div><h3>Colour</h3><div class="sw"><i style="background:#bfe7f7"></i><i style="background:#6dbb52"></i><i style="background:#46b9d6"></i><i style="background:#f28a26"></i><i style="background:#f6b80b"></i><i style="background:#eceae3"></i><i style="background:#4a2c20"></i></div></div>
+    <div><h3>Type</h3><div class="slab" style="font-size:34px">Roboto Slab plaques</div><div style="font-weight:600">Fredoka for friendly UI text</div></div>
+    <div><h3>Components</h3><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="chunky" style="font-size:20px;padding:10px 22px">Play</span><span class="stonebtn">3</span><span class="coins">1,240<span class="coin">C</span></span></div></div>
+  </section>
+</body>
+</html>

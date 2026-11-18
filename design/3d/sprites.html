@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Arena 3D — sprite renderer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Roboto+Slab:wght@900&display=swap" rel="stylesheet" />
+<script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }
+</script>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; background: #2a1d14; color: #fff3df; }
+  header { padding: 16px 20px; }
+  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; padding: 0 20px 30px; }
+  figure { margin: 0; background: radial-gradient(circle at 50% 40%, #8fd0e0, #4f9a3c); border-radius: 18px; padding: 6px; text-align: center; }
+  figure img { width: 100%; display: block; }
+  figcaption { font-size: 11px; color: #12230c; font-weight: 700; padding-bottom: 4px; }
+  #out { display: none; }
+</style>
+</head>
+<body>
+<header><b>Arena 3D sprites</b> · <span id="status">rendering…</span></header>
+<div id="grid"></div>
+<textarea id="out"></textarea>
+<script type="module">
+  import * as THREE from 'three';
+  import { PROPS, studio } from './kit.js';
+
+  const SIZE = Number(new URLSearchParams(location.search).get('size') || 384);
+  const only = new URLSearchParams(location.search).get('keys');
+  const keys = only ? only.split(',') : Object.keys(PROPS);
+
+  await Promise.all([document.fonts.load('700 64px Fredoka'), document.fonts.load('900 64px "Roboto Slab"')]).catch(() => {});
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(1);
+  renderer.setSize(SIZE * 1.5, SIZE * 1.5);
+  renderer.toneMapping = THREE.NeutralToneMapping;
+  renderer.toneMappingExposure = 0.98;
+  renderer.setClearColor(0x000000, 0);
+
+  /** Crop to visible pixels and re-centre on a square canvas with a small margin. */
+  function tighten(src, size) {
+    const tmp = document.createElement('canvas');
+    tmp.width = src.width;
+    tmp.height = src.height;
+    const g = tmp.getContext('2d');
+    g.drawImage(src, 0, 0);
+    const { data, width, height } = g.getImageData(0, 0, tmp.width, tmp.height);
+    let x0 = width, y0 = height, x1 = -1, y1 = -1;
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      if (data[(y * width + x) * 4 + 3] > 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (x1 < 0) return src.toDataURL('image/png');
+    const w = x1 - x0 + 1, h = y1 - y0 + 1;
+    const side = Math.max(w, h) / 0.92;
+    const outC = document.createElement('canvas');
+    outC.width = outC.height = size;
+    const k = size / side;
+    const o = outC.getContext('2d');
+    o.imageSmoothingQuality = 'high';
+    o.drawImage(tmp, x0, y0, w, h, (size - w * k) / 2, (size - h * k) / 2, w * k, h * k);
+    return outC.toDataURL('image/png');
+  }
+
+  const out = {};
+  const grid = document.getElementById('grid');
+  for (const key of keys) {
+    const scene = new THREE.Scene();
+    studio(scene, renderer, { coolPower: 8 });
+    const obj = PROPS[key]();
+    const drop = [];
+    obj.traverse((o) => { if (o.userData.shadow) drop.push(o); });
+    drop.forEach((o) => o.parent.remove(o));
+    const pivot = new THREE.Group();
+    pivot.add(obj);
+    pivot.rotation.set(0.14, -0.38, 0);
+    scene.add(pivot);
+    pivot.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(pivot);
+    const center = box.getCenter(new THREE.Vector3());
+    const sphere = box.getBoundingSphere(new THREE.Sphere());
+    const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
+    const dist = (sphere.radius / Math.sin(THREE.MathUtils.degToRad(12))) * 1.04;
+    camera.position.set(center.x, center.y, center.z + dist);
+    camera.lookAt(center);
+    renderer.render(scene, camera);
+    const url = tighten(renderer.domElement, SIZE);
+    out[key] = url;
+    const f = document.createElement('figure');
+    f.innerHTML = `<img src="${url}" alt="${key}"><figcaption>${key}</figcaption>`;
+    grid.appendChild(f);
+    scene.traverse((o) => { o.geometry?.dispose?.(); });
+  }
+  document.getElementById('out').textContent = JSON.stringify(out);
+  document.getElementById('status').textContent = `done: ${keys.length} sprites`;
+  document.body.dataset.done = '1';
+</script>
+</body>
+</html>

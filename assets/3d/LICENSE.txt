@@ -1,0 +1,1 @@
+Original 3D art for Class Arena, modelled procedurally in design/3d/kit.js and rendered by scripts/render-3d.mjs.

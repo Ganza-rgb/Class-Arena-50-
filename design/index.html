@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Class Arena — Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@900&family=Fredoka:wght@600&family=Lilita+One&family=Plus+Jakarta+Sans:wght@500;700;800&family=Poppins:ital,wght@1,800&family=Roboto+Slab:wght@900&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #f4f1ea; color: #15131a; }
+  main { max-width: 1180px; margin: 0 auto; padding: 40px 20px 60px; }
+  h1 { font-size: 44px; font-weight: 800; letter-spacing: -1px; }
+  .lead { max-width: 640px; color: #4b4757; line-height: 1.55; margin-top: 10px; font-size: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 30px; }
+  a.card { text-decoration: none; color: inherit; border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; background: #fff; box-shadow: 0 14px 30px rgba(30, 20, 60, .1); transition: transform .15s; }
+  a.card:hover { transform: translateY(-4px); }
+  .art { height: 230px; position: relative; overflow: hidden; display: grid; place-items: center; }
+  .art img { position: absolute; }
+  .body { padding: 16px 18px 20px; }
+  .body small { font-weight: 800; letter-spacing: 1px; font-size: 11px; color: #8a8496; }
+  .body h2 { font-size: 26px; margin: 4px 0 6px; }
+  .body p { color: #4b4757; font-size: 14px; line-height: 1.45; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .tags span { font-size: 11.5px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: #f1eef7; color: #4b4757; }
+  .note { margin-top: 30px; background: #fff; border-radius: 22px; padding: 18px 20px; color: #4b4757; line-height: 1.55; font-size: 14.5px; }
+  .stk { filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff) drop-shadow(0 10px 14px rgba(0, 0, 0, .2)); }
+  .gl { filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .5)); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Class Arena: pick a direction</h1>
+  <p class="lead">Five visual directions, each blending the references differently. Every one uses the app’s real 3D art and real content. Open each to see three phone screens plus its colours, type and buttons. Tell me which one to build, or mix parts (e.g. “B’s home with C’s map”).</p>
+
+  <div class="grid">
+    <a class="card" href="a-sticker-pop.html">
+      <div class="art" style="background:linear-gradient(160deg,#fff27a,#d9f45b)">
+        <span style="font-family:Anton;font-size:64px;text-transform:uppercase;position:absolute;top:18px">Hey!</span>
+        <img class="stk" src="../assets/3d/av-2.png" width="140" style="bottom:-6px" alt="" />
+        <img class="stk" src="../assets/3d/crush-board.png" width="70" style="left:26px;bottom:30px;transform:rotate(-12deg)" alt="" />
+        <img class="stk" src="../assets/3d/ball.png" width="58" style="right:30px;bottom:40px" alt="" />
+      </div>
+      <div class="body"><small>DIRECTION A · LIGHT</small><h2>Sticker Pop</h2><p>Bright, loud, magazine-style. Giant headlines and sticker-cut 3D characters. Friendliest and most different.</p><div class="tags"><span>Light</span><span>Playful</span><span>Bold type</span></div></div>
+    </a>
+
+    <a class="card" href="b-arcade-night.html">
+      <div class="art" style="background:radial-gradient(260px 200px at 50% 60%,rgba(255,61,120,.45),transparent),#14161c">
+        <span style="font-family:'Lilita One';font-size:40px;color:#fff;position:absolute;top:18px">ARCADE NIGHT</span>
+        <img class="gl" src="../assets/3d/crush-board.png" width="130" style="bottom:22px" alt="" />
+        <img class="gl" src="../assets/3d/bracket.png" width="70" style="left:24px;bottom:36px" alt="" />
+        <img class="gl" src="../assets/3d/confessions.png" width="64" style="right:24px;bottom:40px" alt="" />
+      </div>
+      <div class="body"><small>DIRECTION B · DARK</small><h2>Arcade Night</h2><p>Premium game hub with glossy collectible tiles, a live wins ticker and promo banners. XP, not money.</p><div class="tags"><span>Dark</span><span>Collectible</span><span>Exciting</span></div></div>
+    </a>
+
+    <a class="card" href="c-campus-quest.html">
+      <div class="art" style="background:linear-gradient(180deg,#9fdcf0 0%,#9fdcf0 35%,#6dbb52 36%,#4f9a3c 100%)">
+        <span style="font-family:'Roboto Slab',serif;font-weight:900;font-size:40px;color:#8d9a8b;background:#eceae3;border-radius:22px;padding:6px 18px;position:absolute;top:20px;box-shadow:inset 0 -6px 0 #cfcbbf">Quest</span>
+                <img class="gl" src="../assets/3d/rizz-meter.png" width="110" style="bottom:16px;left:30px" alt="" />
+        <span style="position:absolute;right:30px;bottom:36px;font-family:Fredoka;font-size:26px;color:#fff3df;background:linear-gradient(180deg,#ff9a3c,#f28a26);border-radius:16px;padding:6px 18px;box-shadow:inset 0 -5px 0 #c9640e">Next</span>
+      </div>
+      <div class="body"><small>DIRECTION C · DAYLIGHT</small><h2>Campus Quest</h2><p>A cozy adventure map: each island is a game, with stone plaques and chunky buttons. Most “come back tomorrow”.</p><div class="tags"><span>Cozy</span><span>Progression</span><span>Tactile</span></div></div>
+    </a>
+
+    <a class="card" href="d-arena-pro.html">
+      <div class="art" style="background:radial-gradient(260px 200px at 50% 50%,#3b1f9a,#0d0a1c)">
+        <span style="font-family:Poppins;font-style:italic;font-weight:800;font-size:44px;color:#fff;position:absolute;top:18px">ARENA</span>
+        <img class="gl" src="../assets/3d/ranking.png" width="120" style="bottom:20px" alt="" />
+        <img class="gl" src="../assets/3d/crown.png" width="56" style="left:40px;bottom:54px" alt="" />
+        <img class="gl" src="../assets/3d/star.png" width="48" style="right:44px;bottom:60px" alt="" />
+      </div>
+      <div class="body"><small>DIRECTION D · DARK</small><h2>Arena Pro</h2><p>Calm, polished, one violet accent. Levels, XP, daily challenge and a clean leaderboard. Lowest risk.</p><div class="tags"><span>Dark</span><span>Polished</span><span>Structured</span></div></div>
+    </a>
+    <a class="card" href="e-living-3d.html" style="grid-column:1/-1">
+      <div class="art" style="height:260px;background:radial-gradient(500px 260px at 50% 30%,#2a3a6e,#10172a)">
+        <span style="font-family:Outfit,'Plus Jakarta Sans';font-weight:900;font-size:46px;color:#fff;position:absolute;top:18px;left:28px;letter-spacing:-1px">Living 3D</span>
+        <span style="position:absolute;top:76px;left:30px;color:#b9c3e4;font-weight:600;font-size:14px;max-width:300px;text-align:left">Live, original three.js objects that react to your cursor</span>
+        <div data-3d="trophy" style="position:absolute;left:34%;top:20px;width:200px;height:230px"></div>
+        <div data-3d="podium" style="position:absolute;right:2%;top:10px;width:340px;height:240px"></div>
+        <div data-3d="like" style="position:absolute;left:30px;bottom:14px;width:96px;height:96px"></div>
+        <div data-3d="coin" style="position:absolute;left:130px;bottom:30px;width:60px;height:60px"></div>
+      </div>
+      <div class="body"><small>DIRECTION E · DARK · RECOMMENDED ART STYLE</small><h2>Living 3D</h2><p>Your latest reference rebuilt with real-time 3D: reflective gold, glass, marble and blinking mascot avatars, with calm motion throughout. The 3D kit can power any of A–D too.</p><div class="tags"><span>Original 3D</span><span>Alive</span><span>Moderated</span></div></div>
+    </a>
+  </div>
+
+  <div class="note"><b>Safety in every direction:</b> anonymous posts never show on profiles, mean posts can be reported and hidden, and rewards are XP/coins only (no betting language, no real money). Art: original 3D models (<code>design/3d/kit.js</code>), rendered to <code>assets/3d</code> by <code>npm run gen:art</code>.</div>
+</main>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+<script type="module">import { mountAll } from './3d/arena3d.js'; mountAll();</script>
+</body>
+</html>
